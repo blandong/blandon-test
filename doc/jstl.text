@@ -1,0 +1,37 @@
+http://stackoverflow.com/questions/1890438/how-to-get-parameters-from-the-url-with-jsp
+
+Question:How to access request parameter from request:
+
+About the Implicit Objects of the Unified Expression Language, the Java EE 5 Tutorial writes:
+
+Implicit Objects
+The JSP expression language defines a set of implicit objects:
+
+pageContext: The context for the JSP page. Provides access to various objects including:
+servletContext: The context for the JSP page’s servlet and any web components contained in the same application. See Accessing the Web Context.
+session: The session object for the client. See Maintaining Client State.
+request: The request triggering the execution of the JSP page. See Getting Information from Requests.
+response: The response returned by the JSP page. See Constructing Responses.
+In addition, several implicit objects are available that allow easy access to the following objects:
+param: Maps a request parameter name to a single value
+paramValues: Maps a request parameter name to an array of values
+header: Maps a request header name to a single value
+headerValues: Maps a request header name to an array of values
+cookie: Maps a cookie name to a single cookie
+initParam: Maps a context initialization parameter name to a single value
+Finally, there are objects that allow access to the various scoped variables described in Using Scope Objects.
+pageScope: Maps page-scoped variable names to their values
+requestScope: Maps request-scoped variable names to their values
+sessionScope: Maps session-scoped variable names to their values
+applicationScope: Maps application-scoped variable names to their values
+The interesting parts are in bold :)
+
+So, to answer your question, you should be able to access it like this (using EL):
+
+${param.accountID}
+
+Or, using JSP Scriptlets (not recommended):
+
+<%
+    String accountId = request.getParameter("accountID");
+%>
