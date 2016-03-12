@@ -1,6 +1,7 @@
 <%@ page import="com.blandon.test.*"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib uri="red" prefix="user" %>
 
 <%
 	boolean b1 = true;
@@ -25,7 +26,11 @@
 	
 	<span>Name from request: ${name}</span><br/>
 	
-	<span>another Name from request: ${param.name}</span><br/>
+	<user:red property="${param.name}">
+		<span>another Name from request:</span>${param.name}
+	</user:red>
+	
+	 <br/>
 	
 	
 	<c:if test="${b1 && b2}">
