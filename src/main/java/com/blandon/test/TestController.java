@@ -34,12 +34,34 @@ public class TestController {
 		model.addObject("returnedUser", user);
 		
 		request.setAttribute("newUser", newUser);
-		
 
 		return model;
 		
-		
-		
 	}
+	
+	@RequestMapping(value="/save", method=RequestMethod.POST)
+	public String handle2(HttpServletRequest request, HttpServletResponse response){
+		User user = new User();
+		String name = request.getParameter("name");
+		user.setName(name);
+		user.setAge(20);
+		
+		testService.saveUser(user);
+		
+		request.setAttribute("savedUser", user);
+		
+		return "saveSuccess";
+	}
+	
+	
+	
+	@RequestMapping(method = RequestMethod.GET, value="test")
+	public ModelAndView  handle3(HttpServletRequest request, HttpServletResponse  response){
+		ModelAndView model = new ModelAndView();
+		model.setViewName("displayUser");
+		return model;
+	}
+	
+	
 
 }

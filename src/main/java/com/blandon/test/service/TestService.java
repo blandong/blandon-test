@@ -15,4 +15,8 @@ public class TestService {
 	public  User findByName(String name){
 		return userDao.findByName(name);
 	}
+	
+	public User saveUser(User user){
+		return userDao.save(user);
+	}
 }

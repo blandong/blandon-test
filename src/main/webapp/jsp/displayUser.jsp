@@ -19,9 +19,14 @@
 
 	<h1>Welcome, New Commers!!</h1>
 	
-	Returned name is: <h2>${returnedUser.name }</h2>
+	<span>Returned name is:</span> <h2>${returnedUser.name }</h2>
 
-	New created user name is: <h3>${newUser.name }</h3>
+	<span>New created user name is: </span><h3>${newUser.name }</h3>
+	
+	<span>Name from request: ${name}</span><br/>
+	
+	<span>another Name from request: ${param.name}</span><br/>
+	
 	
 	<c:if test="${b1 && b2}">
 		<%out.println(falseTest); %>

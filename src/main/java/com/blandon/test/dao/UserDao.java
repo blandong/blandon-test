@@ -11,4 +11,9 @@ public class UserDao {
 		User user = new User(name);
 		return user;
 	}
+	
+	
+	public User save(User user){
+		return user;
+	}
 }
