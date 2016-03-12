@@ -7,7 +7,7 @@
 <short-name>Encode Tag Library</short-name>
 <uri>http://www.blandon.com/taglib/user.tld</uri>
 <display-name>Label Tag Library</display-name>
-<description>Tag Library to change color of label for XSS fields for CCA Screens</description>
+<description>Tag Library to change color of text</description>
 
 <tag>
     <name>red</name>
