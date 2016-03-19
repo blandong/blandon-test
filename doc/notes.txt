@@ -1,0 +1,25 @@
+http://www.mkyong.com/spring-mvc/spring-mvc-xmlviewresolver-example/
+
+In Spring MVC, XmlViewResolver is used to resolve “view name” based on view beans in the XML file. By default, XmlViewResolver will loads the view beans from /WEB-INF/views.xml, however, this location can be overridden through the “location” property :
+
+
+<beans ...>
+	<bean class="org.springframework.web.servlet.view.XmlViewResolver">
+	   <property name="location">
+		<value>/WEB-INF/spring-views.xml</value>
+	   </property>
+	</bean>
+</beans>
+
+
+
+In Spring MVC, ResourceBundleViewResolver is used to resolve “view named” based on view beans in “.properties” file.
+
+By default, ResourceBundleViewResolver will loads the view beans from file views.properties, which located at the root of the project class path. However, this location can be overridden through the “basename” property, for example,
+
+
+<beans ...>
+	<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename" value="spring-views" />
+	</bean>
+</beans>

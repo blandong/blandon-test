@@ -9,9 +9,15 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-
-	<bean id="viewResolver"
+	<!-- <bean id="defaultViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:prefix="/jsp/" p:suffix=".jsp" />
+		p:prefix="/jsp/" p:suffix=".jsp" /> -->
+	
+	<!-- <bean class="org.springframework.web.servlet.view.XmlViewResolver" 
+		p:location="/WEB-INF/views.xml" /> -->
+		
+	<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename" value="spring-views" />
+	</bean>
 
 </beans>
