@@ -28,8 +28,10 @@ public class TestController {
 		
 		User newUser = new User("newCreatedUser");
 		
+		String view = request.getParameter("view");
+		
 		ModelAndView model = new ModelAndView();
-		model.setViewName("displayUser");
+		model.setViewName(view);
 		
 		model.addObject("returnedUser", user);
 		

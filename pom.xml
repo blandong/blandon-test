@@ -36,6 +36,19 @@
 		    <artifactId>jstl</artifactId>
 		    <version>1.2</version>
 		</dependency>
+		
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+		
   </dependencies>
   
    <repositories>
@@ -47,5 +60,21 @@
           </releases>
         </repository>
    </repositories>
+   
+   <build>
+   		<plugins>
+		   <plugin>
+               <artifactId>maven-compiler-plugin</artifactId>
+               <version>3.1</version>
+               <configuration>
+                   <debug>true</debug>
+                   <showDeprecation>true</showDeprecation>
+                   <showWarnings>true</showWarnings>
+                   <source>1.8</source>
+                   <target>1.8</target>
+               </configuration>
+           </plugin>
+   		</plugins>
+   </build>
   
 </project>

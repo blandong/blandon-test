@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -9,15 +11,26 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-	<!-- <bean id="defaultViewResolver"
+	<bean id="defaultViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:prefix="/jsp/" p:suffix=".jsp" /> -->
+		p:prefix="/jsp/" p:suffix=".jsp" p:order="3"/> 
 	
-	<!-- <bean class="org.springframework.web.servlet.view.XmlViewResolver" 
-		p:location="/WEB-INF/views.xml" /> -->
+	<!-- look for views mapped in /WEB-INF/views.xml file -->
+	<bean class="org.springframework.web.servlet.view.XmlViewResolver" 
+		p:location="/WEB-INF/views.xml" p:order="0"/>
 		
+	<!-- look for views mapped in spring-views.properties file-->
 	<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
 		<property name="basename" value="spring-views" />
-	</bean>
+		<property name="order" value="1"></property>	
+	</bean> 
+
+	<bean id="customViewResolver" class="com.blandon.test.view.UserJsonConverterViewResolver"
+	c:view-ref="userJsonView" p:order="2"/>
+	
+	<bean id="userJsonView" class="com.blandon.test.view.UserJsonView" 
+	c:converter-ref="userJsonConverter"/>
+
+	<bean id="userJsonConverter" class="com.blandon.test.view.UserJsonConverter"/>
 
 </beans>
