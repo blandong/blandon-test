@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util.xsd">
+        
+        <util:constant id="myConstant" static-field="java.lang.Integer.MAX_VALUE"/>
+        
+        <!-- constant  staticField must be a fully qualified class plus static field name: e.g. 'example.MyExampleClass.MY_EXAMPLE_FIELD' -->
+        <bean id="utilBean" class="com.blandon.test.bean.UtilBean">
+		  <property name="constant1">
+		    <util:constant static-field="com.blandon.test.bean.Constants.value1"/>
+		  </property>
+		  <property name="constant2" ref="myConstant" />
+		  <!-- injet enum value -->
+		  <property name="testEnum" value="ONE"/>
+		</bean>
+		
+		
+		<!-- creates a java.util.Properties instance with values loaded from the supplied location -->
+		<bean id="testProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		  <property name="location" value="classpath:test.properties"/>
+		</bean>
+
+		<!-- creates a java.util.Properties instance with values loaded from the supplied location -->
+		<util:properties id="testProperties2" location="classpath:test.properties"/>
+		
+		
+		<bean id="utilBean2" class="com.blandon.test.bean.UtilBean">
+		  <property name="name1" value="${name1}"/>
+		  <property name="name2" value="${name2}" />
+		</bean>
+		
+		
+<!-- 
+	    <util:list id="Y" list-class="java.util.ArrayList">
+	        <value>value1</value>
+	        <ref bean="X"/>
+	    </util:list>
+	
+	    <util:list id="greetingsList">
+	        <value>Hello, world</value>
+	        <value>How are you doing today?</value>
+	    </util:list>
+	
+	    <util:map id="Z" map-class="java.util.HashMap" key-type="java.lang.String" value-type="javax.sql.DataSource">
+	        <entry key="x" value="y"/>
+	        <entry key="y"><ref bean="X"/></entry>
+	    </util:map>
+	    
+	    <util:map id="myMap" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.String">
+	        <entry key="mykey" value="myValue"/>
+	    </util:map>
+	
+	    <util:properties id="mainProperty" location="classpath:Main.properties"/>
+	
+	    <util:property-path id="Q" path="simple.name"/>
+	
+	    <util:set id="S" set-class="java.util.HashSet">
+	        <value>foo</value>
+	        <ref bean="X"/>
+	    </util:set>
+ -->
+
+</beans>
