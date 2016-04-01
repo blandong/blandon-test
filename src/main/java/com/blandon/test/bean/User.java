@@ -13,6 +13,9 @@ public class User {
 	}
 	private String name;
 	private int age;
+	
+	private Location location;
+	
 	public String getName() {
 		return name;
 	}
@@ -24,6 +27,13 @@ public class User {
 	}
 	public void setAge(int age) {
 		this.age = age;
+	}
+	
+	public Location getLocation() {
+		return location;
+	}
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 	@Override
 	public int hashCode() {

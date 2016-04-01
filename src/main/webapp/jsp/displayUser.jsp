@@ -20,6 +20,8 @@
 	<h1>Welcome, New Commers!!</h1>
 	
 	<span>Returned name is:</span> <h2>${returnedUser.name }</h2>
+	
+	<span>Returned user's location: </span> <h2>${returnedUser.location.address }</h2>
 
 	<span>New created user name is: </span><h3>${newUser.name }</h3>
 	

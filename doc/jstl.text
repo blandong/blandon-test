@@ -1,3 +1,6 @@
+http://localhost:8080/blandon-test/user.do?name=test
+
+
 http://stackoverflow.com/questions/1890438/how-to-get-parameters-from-the-url-with-jsp
 
 Question:How to access request parameter from request:
