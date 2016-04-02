@@ -28,6 +28,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
@@ -51,12 +52,18 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.blandon.test.bean.MyJsonObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class HttpClientTest {
+	
+	private static final Logger logger = LoggerFactory.getLogger(HttpClientTest.class);
+	
+	
 	public static void main(String[] args) throws ClientProtocolException, IOException {
 		//client1();
 		//closeResponse();
@@ -65,6 +72,47 @@ public class HttpClientTest {
 	}
 	
 	
+	
+	private static void testConsumeResponse(){
+		
+		HttpGet get = new HttpGet("http://localhost:8080/blandon-test/user.do?name=blandon");
+		
+		HttpClient httpClient = HttpClients.createDefault();
+		
+		HttpResponse response = null;
+		
+		try{
+			response = httpClient.execute(get);
+			
+			if(response != null){
+				StatusLine statusLine = response.getStatusLine();
+				
+				int statusCode = statusLine.getStatusCode();
+				String version = statusLine.getProtocolVersion().toString();
+				String phrase = statusLine.getReasonPhrase();
+				
+				logger.debug("response status: "+statusCode+", version: "+version+", phrase: "+phrase);
+				
+				if(statusCode != 200){
+					throw new RuntimeException("Request is not successful, please verify your request.");
+				}else{
+					HttpEntity entity = response.getEntity();
+					String type = entity.getContentType().toString();
+					long length = entity.getContentLength();
+					String encoding = entity.getContentEncoding().toString();
+					
+					logger.debug("content type: %s, length: %l, encoding: %s", type, length, encoding);
+					
+					InputStream is = entity.getContent();
+				}
+			}
+			
+			
+		}catch(IOException e){
+			throw new RuntimeException("Fail to excute this request: "+get.getURI(), e);
+		}
+		
+	}
 	
 	private static void client1(){
 		CloseableHttpResponse response = null;

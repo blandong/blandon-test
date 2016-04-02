@@ -1,1 +1,4 @@
 https://hc.apache.org/httpcomponents-client-ga/tutorial/html/fundamentals.html
+
+
+http://localhost:8080/blandon-test/user.do?name=blandon
