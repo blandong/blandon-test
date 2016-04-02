@@ -1,5 +1,6 @@
 package com.blandon.test.http;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,11 +69,13 @@ public class HttpClientTest {
 		//client1();
 		//closeResponse();
 		//consumeEntityConetent();
-		protocalInterceptor();
+		//protocalInterceptor();
+		//testConsumeResponse();
+		testSubmitForm();
 	}
 	
 	
-	
+	//get response and convert the html to string to print on console
 	private static void testConsumeResponse(){
 		
 		HttpGet get = new HttpGet("http://localhost:8080/blandon-test/user.do?name=blandon");
@@ -91,6 +94,7 @@ public class HttpClientTest {
 				String version = statusLine.getProtocolVersion().toString();
 				String phrase = statusLine.getReasonPhrase();
 				
+				
 				logger.debug("response status: "+statusCode+", version: "+version+", phrase: "+phrase);
 				
 				if(statusCode != 200){
@@ -99,11 +103,31 @@ public class HttpClientTest {
 					HttpEntity entity = response.getEntity();
 					String type = entity.getContentType().toString();
 					long length = entity.getContentLength();
-					String encoding = entity.getContentEncoding().toString();
 					
-					logger.debug("content type: %s, length: %l, encoding: %s", type, length, encoding);
+					logger.debug("content type: {}, length: {}", type, length);
 					
-					InputStream is = entity.getContent();
+					BufferedReader br = null;
+					
+					try{
+						InputStream is = entity.getContent();
+						
+						br = new BufferedReader(new InputStreamReader(is));
+						
+						String line =null;
+						
+						StringBuilder sb = new StringBuilder();
+						
+						while ((line =br.readLine()) != null){
+							sb.append(line).append("\n");
+						}
+						System.out.println("response content is: \n"+sb.toString());
+						
+					}finally{
+						if(br != null){
+							br.close();
+						}
+					}
+					
 				}
 			}
 			
@@ -113,6 +137,48 @@ public class HttpClientTest {
 		}
 		
 	}
+	
+	
+	//test post data
+	private static void testSubmitForm() throws IOException{
+		
+		List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+		formparams.add(new BasicNameValuePair("name", "Gary"));
+		
+		//The UrlEncodedFormEntity instance will use the so called URL encoding to encode parameters and produce the following content:
+		//param1=value1&param2=value2
+		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, Consts.UTF_8);
+		
+		HttpPost post = new HttpPost("http://localhost:8080/blandon-test/user.do?");
+		post.setEntity(entity);
+		
+		CloseableHttpClient client = HttpClients.createDefault();
+		
+		CloseableHttpResponse resp = null;
+		
+		try{
+			resp = client.execute(post);
+			
+			logger.debug("status code: {}, status phrase: {}", resp.getStatusLine().getStatusCode(), resp.getStatusLine().getReasonPhrase());
+			
+			HttpEntity respEntity = resp.getEntity();
+			
+			logger.debug("type: {}, length: {}", respEntity.getContentType(), respEntity.getContentLength());
+			
+			
+			
+		}catch(IOException e){
+			throw new RuntimeException("Fail to execute http post", e);
+		}finally{
+			if(resp != null){
+				resp.close();
+			}
+			
+		}
+		
+		
+	}
+	
 	
 	private static void client1(){
 		CloseableHttpResponse response = null;
@@ -324,7 +390,7 @@ public class HttpClientTest {
 		try {
 		    HttpEntity entity = response.getEntity();
 		    if (entity != null) {
-		        entity =entity = new BufferedHttpEntity(entity);
+		        entity = new BufferedHttpEntity(entity);
 		    }
 		} finally {
 		    response.close();
@@ -541,7 +607,7 @@ public class HttpClientTest {
 		
 		This is an example of how local context can be used to persist a processing state between consecutive requests:
 	 * */
-	private static void protocalInterceptor() throws ClientProtocolException, IOException{
+	private static void protocolInterceptor() throws ClientProtocolException, IOException{
 		
 		CloseableHttpClient httpclient = HttpClients.custom()
 		        .addInterceptorLast(new HttpRequestInterceptor() {
