@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:c="http://www.springframework.org/schema/c" xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd ">
+
+
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="com.blandon.test.http.MyMediaConverter" />
+            </list>
+        </property>
+    </bean>
+
+
+
+    <mvc:annotation-driven conversion-service="conversionService">
+        <mvc:message-converters>
+            <ref bean="userConverter" />
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+
+    <bean id="userConverter" class="com.blandon.test.http.converter.UserConverter"/>
+
+
+
+
+
+	<!--  
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+	    <property name="messageConverters">
+	      <util:list id="beanList">
+	        <ref bean="userConverter"/>
+	      </util:list>
+	    </property>
+	</bean>
+-->
+
+<!--  
+    <mvc:annotation-driven >
+        <mvc:message-converters>
+            <ref bean="userConverter" />
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                 <ref bean="userConverter" />
+            </list>
+        </property>
+	</bean>
+-->
+
+	<!-- This will automatically switch on the default httpmessageconverters
+ <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+  <mvc:message-converters register-defaults="true">
+   <bean class="com.blandon.test.http.converter.UserConverter"/>
+  </mvc:message-converters>
+ </mvc:annotation-driven>
+  -->
+ 
+	<!-- 
+	<mvc:message-converters register-defaults="true">
+	    <bean id="userConverter" class="com.blandon.test.http.converter.UserConverter"/>
+	</mvc:message-converters>
+ -->
+ 
+
+    
+    <bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/jsp/" p:suffix=".jsp" />
+
+</beans>

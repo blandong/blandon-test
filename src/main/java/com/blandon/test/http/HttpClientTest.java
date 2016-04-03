@@ -1,10 +1,12 @@
 package com.blandon.test.http;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -57,6 +59,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.blandon.test.bean.MyJsonObject;
+import com.blandon.test.bean.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -65,7 +68,7 @@ public class HttpClientTest {
 	private static final Logger logger = LoggerFactory.getLogger(HttpClientTest.class);
 	
 	
-	public static void main(String[] args) throws ClientProtocolException, IOException {
+	public static void main(String[] args) throws ClientProtocolException, IOException, ClassNotFoundException {
 		//client1();
 		//closeResponse();
 		//consumeEntityConetent();
@@ -140,7 +143,7 @@ public class HttpClientTest {
 	
 	
 	//test post data
-	private static void testSubmitForm() throws IOException{
+	private static void testSubmitForm() throws IOException, ClassNotFoundException{
 		
 		List<NameValuePair> formparams = new ArrayList<NameValuePair>();
 		formparams.add(new BasicNameValuePair("name", "Gary"));
@@ -164,6 +167,14 @@ public class HttpClientTest {
 			HttpEntity respEntity = resp.getEntity();
 			
 			logger.debug("type: {}, length: {}", respEntity.getContentType(), respEntity.getContentLength());
+			
+			ByteArrayInputStream bais = (ByteArrayInputStream) respEntity.getContent();
+			
+			ObjectInputStream ois = new  ObjectInputStream(bais);
+			
+			User user = (User)ois.readObject();
+			
+			logger.debug("Returned user name is: {}", user.getName());
 			
 			
 			

@@ -1,6 +1,9 @@
 package com.blandon.test.bean;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
+	private static final long serialVersionUID = 2469430342623886797L;
 	public User(){}
 	public User(String name) {
 		super();

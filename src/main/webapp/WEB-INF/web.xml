@@ -5,6 +5,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath:application-context-config.xml
+			classpath:app-view.xml
 		</param-value>
 	</context-param>
 	
@@ -15,6 +16,11 @@
 	<servlet>
 	   <servlet-name>blandon-test</servlet-name>
 	     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	     <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value></param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
 	</servlet>
 	
 
