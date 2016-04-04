@@ -6,11 +6,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.http.Consts;
@@ -28,7 +35,10 @@ import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
@@ -40,13 +50,22 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
+import org.apache.http.impl.client.FutureRequestExecutionService;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpRequestFutureTask;
+import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
+import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
 import org.apache.http.message.BasicHeaderElementIterator;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicNameValuePair;
@@ -65,27 +84,50 @@ public class HttpClientTest {
 	private static final Logger logger = LoggerFactory.getLogger(HttpClientTest.class);
 	
 	
-	public static void main(String[] args) throws ClientProtocolException, IOException {
+	public static void main(String[] args) throws ClientProtocolException, IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		//client1();
 		//closeResponse();
 		//consumeEntityConetent();
 		//protocalInterceptor();
-		//testConsumeResponse();
-		testSubmitForm();
+		testConsumeResponse();
+		//testSubmitForm();
 	}
 	
 	
 	//get response and convert the html to string to print on console
-	private static void testConsumeResponse(){
+	private static void testConsumeResponse() throws IOException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException{
 		
-		HttpGet get = new HttpGet("http://localhost:8080/blandon-test/user.do?name=blandon");
+		String httpUrl = "http://localhost:8080/blandon-test/user.do?name=blandon";
 		
-		HttpClient httpClient = HttpClients.createDefault();
+		String httpsUrl = "https://localhost:8443/blandon-test/user.do?name=blandon";
 		
+		HttpGet get = new HttpGet(httpsUrl);
+		
+//		CloseableHttpClient httpClient = HttpClients.createDefault();
+		
+		CloseableHttpClient httpClient2 = HttpClients.custom()
+				.setSSLSocketFactory(new SSLSocketFactory(SSLContexts.custom()
+						.loadTrustMaterial(null, new TrustSelfSignedStrategy()).build())).build();
+				
 		HttpResponse response = null;
 		
+		//String encoding = Base64.encodeBase64String("tomcat:tomcat".getBytes());
+		
+		//get.setHeader("Authorization", "Basic " + encoding);
+		
 		try{
-			response = httpClient.execute(get);
+			//username and password are specified in tomcat-users.xml file.
+			UsernamePasswordCredentials npc = new UsernamePasswordCredentials("tomcat", "tomcat");
+			
+			AuthScope authScope = new AuthScope("localhost", AuthScope.ANY_PORT);
+			
+			CredentialsProvider credsProvider = new BasicCredentialsProvider();
+			credsProvider.setCredentials(authScope, npc);
+			
+			HttpClientContext context = HttpClientContext.create();
+			context.setCredentialsProvider(credsProvider);
+			
+			response = httpClient2.execute(get, context);
 			
 			if(response != null){
 				StatusLine statusLine = response.getStatusLine();
@@ -134,7 +176,10 @@ public class HttpClientTest {
 			
 		}catch(IOException e){
 			throw new RuntimeException("Fail to excute this request: "+get.getURI(), e);
+		}finally{
+			httpClient2.close();
 		}
+	
 		
 	}
 	
@@ -638,18 +683,98 @@ public class HttpClientTest {
 	}
 	
 	
+	/*
+	 * 7.3. Using the FutureRequestExecutionService
+		Using the FutureRequestExecutionService, you can schedule http calls and treat the response as a Future. 
+		This is useful when e.g. making multiple calls to a web service. The advantage of using the FutureRequestExecutionService is that you can use multiple threads to schedule requests concurrently, set timeouts on the tasks, or cancel them when a response is no longer necessary.
+		FutureRequestExecutionService wraps the request with a HttpRequestFutureTask, which extends FutureTask. 
+		This class allows you to cancel the task as well as keep track of various metrics such as request duration.
+		7.3.1. Creating the FutureRequestExecutionService
+		The constructor for the futureRequestExecutionService takes any existing httpClient instance and an ExecutorService instance. When configuring both, it is important to align the maximum number of connections with the number of threads you are going to use. 
+		When there are more threads than connections, the connections may start timing out because there are no available connections. When there are more connections than threads, the futureRequestExecutionService will not use all of them
+	 * */
+	private static void futureTask() throws InterruptedException, ExecutionException{
+		HttpClient httpClient = HttpClientBuilder.create().setMaxConnPerRoute(5).build();
+		ExecutorService executorService = Executors.newFixedThreadPool(5);
+		FutureRequestExecutionService futureRequestExecutionService = new FutureRequestExecutionService(httpClient, executorService);
+		
+
+		HttpRequestFutureTask<Boolean> task = futureRequestExecutionService.execute(
+		    new HttpGet("http://www.google.com"), HttpClientContext.create(),
+		    new OkidokiHandler(){
+		    	
+		    });
+		// blocks until the request complete and then returns true if you can connect to Google
+		boolean ok=task.get();
+	}
+	
+	
+	/*
+	 * 2.8. HttpClient proxy configuration
+		Even though HttpClient is aware of complex routing schemes and proxy chaining, it supports only simple direct or one hop proxy connections out of the box.
+		The simplest way to tell HttpClient to connect to the target host via a proxy is by setting the default proxy parameter:
+	 * */
+	private static void httpProxy(){
+		HttpHost proxy = new HttpHost("someproxy", 8080);
+		DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+		CloseableHttpClient httpclient = HttpClients.custom()
+		        .setRoutePlanner(routePlanner)
+		        .build();
+		
+		// can also instruct HttpClient to use the standard JRE proxy selector to obtain proxy information:
+		
+		SystemDefaultRoutePlanner routePlanner2 = new SystemDefaultRoutePlanner(
+		        ProxySelector.getDefault());
+		CloseableHttpClient httpclient2 = HttpClients.custom()
+		        .setRoutePlanner(routePlanner2)
+		        .build();
+		
+		
+	}
+	
+	
+	private static void proxyAuth() throws ClientProtocolException, IOException{
+		CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(
+                new AuthScope("localhost", 8888),
+                new UsernamePasswordCredentials("squid", "squid"));
+        credsProvider.setCredentials(
+                new AuthScope("httpbin.org", 80),
+                new UsernamePasswordCredentials("user", "passwd"));
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setDefaultCredentialsProvider(credsProvider).build();
+        try {
+            HttpHost target = new HttpHost("httpbin.org", 80, "http");
+            HttpHost proxy = new HttpHost("localhost", 8888);
+
+            RequestConfig config = RequestConfig.custom()
+                .setProxy(proxy)
+                .build();
+            HttpGet httpget = new HttpGet("/basic-auth/user/passwd");
+            httpget.setConfig(config);
+
+            System.out.println("Executing request " + httpget.getRequestLine() + " to " + target + " via " + proxy);
+
+            CloseableHttpResponse response = httpclient.execute(target, httpget);
+            try {
+                System.out.println("----------------------------------------");
+                System.out.println(response.getStatusLine());
+                System.out.println(EntityUtils.toString(response.getEntity()));
+            } finally {
+                response.close();
+            }
+        } finally {
+            httpclient.close();
+        }
+	}
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+}
+
+  class OkidokiHandler implements ResponseHandler<Boolean> {
+	public Boolean handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
+		return response.getStatusLine().getStatusCode() == 200;
+	}
 }
