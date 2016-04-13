@@ -15,6 +15,7 @@ servletContext: The context for the JSP page’s servlet and any web components co
 session: The session object for the client. See Maintaining Client State.
 request: The request triggering the execution of the JSP page. See Getting Information from Requests.
 response: The response returned by the JSP page. See Constructing Responses.
+
 In addition, several implicit objects are available that allow easy access to the following objects:
 param: Maps a request parameter name to a single value
 paramValues: Maps a request parameter name to an array of values
