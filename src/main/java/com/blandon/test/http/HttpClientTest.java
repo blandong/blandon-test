@@ -13,12 +13,18 @@ import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLHandshakeException;
 
 import org.apache.http.Consts;
 import org.apache.http.Header;
@@ -53,6 +59,7 @@ import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
@@ -103,7 +110,7 @@ public class HttpClientTest {
 		
 		HttpGet get = new HttpGet(httpsUrl);
 		
-//		CloseableHttpClient httpClient = HttpClients.createDefault();
+		CloseableHttpClient httpClient = HttpClients.createDefault();
 		
 		CloseableHttpClient httpClient2 = HttpClients.custom()
 				.setSSLSocketFactory(new SSLSocketFactory(SSLContexts.custom()
@@ -127,7 +134,12 @@ public class HttpClientTest {
 			HttpClientContext context = HttpClientContext.create();
 			context.setCredentialsProvider(credsProvider);
 			
-			response = httpClient2.execute(get, context);
+			try{
+				response = httpClient.execute(get, context);
+			}catch(SSLHandshakeException e){
+				httpClient = HttpClients.custom().setSslcontext(buildSSLContext()).build();
+				response = httpClient.execute(get, context);
+			}
 			
 			if(response != null){
 				StatusLine statusLine = response.getStatusLine();
@@ -183,6 +195,31 @@ public class HttpClientTest {
 		
 	}
 	
+	
+	
+	
+    /**
+     * Initializes and build SSLContext that trusts all.
+     * 
+     * @return SSLContext the SSLContext.
+     * 
+     */
+    private static SSLContext buildSSLContext() {
+
+        try {
+            return SSLContexts.custom().setSecureRandom(new SecureRandom())
+                    .loadTrustMaterial(null, new TrustStrategy() {
+
+                        /** {@inheritDoc} */
+                        public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                            return true;
+                        }
+                    }).build();
+        } catch (final KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+            throw new IllegalStateException("Unable to create SSLContext for the request", e);
+        }
+
+    }
 	
 	//test post data
 	private static void testSubmitForm() throws IOException{
