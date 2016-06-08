@@ -22,6 +22,8 @@ public class MarshalTest {
 		Employee ep = unMarshal(json);
 		System.out.println(ep.getId());
 		
+		unMarshalFromJsonString();
+		
 		
 	}
 	
@@ -51,6 +53,20 @@ public class MarshalTest {
 		Employee ep = gson.fromJson(json, Employee.class);
 		return ep;
 		
+	}
+	
+	
+	private static Employee unMarshalFromJsonString(){
+	    String jsonString = "{\"id\":1,\"firstName\":\"Lokesh\",\"lastName\":\"Gupta\",\"roles\":[\"ADMIN\",\"MANAGER\"]}";
+	    
+	    Gson gson = new Gson();
+	    
+	    Employee e = gson.fromJson(jsonString, Employee.class);
+	    
+	    System.out.println("unmarshalled to employee: "+e.getFirstName());
+	    
+	    return e;
+	    
 	}
 	
 	
