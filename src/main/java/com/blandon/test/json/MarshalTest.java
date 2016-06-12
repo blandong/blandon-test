@@ -1,11 +1,19 @@
 package com.blandon.test.json;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.blandon.test.bean.Employee;
+import com.blandon.test.bean.Staff;
 import com.google.gson.Gson;
 
 public class MarshalTest {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MarshalTest.class);
 	
 	public static void main(String[] args) {
 		
@@ -24,6 +32,12 @@ public class MarshalTest {
 		
 		unMarshalFromJsonString();
 		
+		
+		Staff staff = createStaff();
+		
+		marshal(staff);
+		
+		unMarshal();
 		
 	}
 	
@@ -48,6 +62,33 @@ public class MarshalTest {
 	}
 	
 	
+	private static Staff createStaff(){
+		
+		Staff staff = new Staff();
+		
+		staff.setFirstName("fName");
+		staff.setLastName("lName");
+		
+		Map<String, String> location = new HashMap<String, String>();
+		location.put("key1", "value1");
+		
+		staff.setLocationMap(location);
+		
+		return staff;
+	}
+	
+	
+	public static void marshal(Staff staff){
+		
+		Gson gson = new Gson();
+		
+		String staffString = gson.toJson(staff, Staff.class);
+		
+		logger.debug("staff string: {}", staffString);
+		
+	}
+	
+	
 	public static Employee unMarshal(String json){
 		Gson gson = new Gson();
 		Employee ep = gson.fromJson(json, Employee.class);
@@ -56,7 +97,25 @@ public class MarshalTest {
 	}
 	
 	
-	private static Employee unMarshalFromJsonString(){
+	public static Staff unMarshal(){
+		
+		//{"locationMap":{"key1":"value1"},"firstName":"fName","lastName":"lName"}
+		
+		String s = "{\"locationMap\":{\"key1\":\"value1\"},\"firstName\":\"fName\",\"lastName\":\"lName\"}";
+		
+		Gson gson = new Gson();
+		
+		Staff staff = gson.fromJson(s, Staff.class);
+		
+		logger.debug("staff: {}", staff);
+		
+		return staff;
+	}
+	
+	
+	public static Employee unMarshalFromJsonString(){
+		
+		//{"id":1,"firstName":"Lokesh","lastName":"Gupta","roles":["ADMIN","MANAGER"]}
 	    String jsonString = "{\"id\":1,\"firstName\":\"Lokesh\",\"lastName\":\"Gupta\",\"roles\":[\"ADMIN\",\"MANAGER\"]}";
 	    
 	    Gson gson = new Gson();
