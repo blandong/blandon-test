@@ -74,7 +74,8 @@ public class HttpClientTest {
 		//consumeEntityConetent();
 		//protocalInterceptor();
 		//testConsumeResponse();
-		testSubmitForm();
+		//testSubmitForm();
+		testCustomConverter();
 	}
 	
 	
@@ -140,6 +141,58 @@ public class HttpClientTest {
 		}
 		
 	}
+	
+	
+	
+	
+	
+	//get response and convert the html to string to print on console
+		public static void testCustomConverter(){
+			
+			HttpGet get = new HttpGet("http://localhost:8080/blandon-test/user/resp.do?name=blandon");
+			get.addHeader("Accept", "application/json");
+			
+			HttpClient httpClient = HttpClients.createDefault();
+			
+			HttpResponse response = null;
+			
+			try{
+				response = httpClient.execute(get);
+				
+				if(response != null){
+					StatusLine statusLine = response.getStatusLine();
+					
+					int statusCode = statusLine.getStatusCode();
+					String version = statusLine.getProtocolVersion().toString();
+					String phrase = statusLine.getReasonPhrase();
+					
+					
+					logger.debug("response status: "+statusCode+", version: "+version+", phrase: "+phrase);
+					
+					if(statusCode != 200){
+						throw new RuntimeException("Request is not successful, please verify your request.");
+					}else{
+						HttpEntity entity = response.getEntity();
+						String type = entity.getContentType().toString();
+						long length = entity.getContentLength();
+						
+						logger.debug("content type: {}, length: {}", type, length);
+						
+						Gson gson = new Gson();
+						
+						User user = gson.fromJson(new InputStreamReader(entity.getContent()), User.class);
+						
+						logger.debug("user name: {}", user.getName());
+						
+					}
+				}
+				
+				
+			}catch(IOException e){
+				throw new RuntimeException("Fail to excute this request: "+get.getURI(), e);
+			}
+			
+		}
 	
 	
 	//test post data

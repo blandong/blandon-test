@@ -49,6 +49,10 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+	<bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+	</bean>
+-->
+	
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="messageConverters">
             <list>
@@ -56,7 +60,6 @@
             </list>
         </property>
 	</bean>
--->
 
 	<!-- This will automatically switch on the default httpmessageconverters
  <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">

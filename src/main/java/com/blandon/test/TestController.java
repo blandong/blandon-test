@@ -45,6 +45,18 @@ public class TestController {
 		return model;
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/resp")
+	public @ResponseBody User ReturnUser(HttpServletRequest request, HttpServletResponse  response){
+		
+		String name = request.getParameter("name");
+		
+		User user =  testService.findByName(name);
+		
+		response.setCharacterEncoding("UTF-8");
+
+		return user;
+	}
+	
 	
 	@RequestMapping(method=RequestMethod.POST)
 	//@PathVariable String name,
