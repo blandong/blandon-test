@@ -27,7 +27,9 @@ public class JsonTest {
 		
 		//jsonWriter(p);
 		
-		testJson2();
+		//testJson2();
+		
+		testJson();
 		
 		
 	}
@@ -186,7 +188,7 @@ public class JsonTest {
 		   
 		   payloadBuilder.add("firstName", "Superuser (S-FEBIDM-FIDM4)");
 		   payloadBuilder.add("middleName", "test");
-		   payloadBuilder.add("lastName", "Covisint");
+		   payloadBuilder.add("lastName", "董");
 		   
 		   payloadBuilder.add("identityNo", "310826198005273963");
 		   
@@ -216,6 +218,39 @@ public class JsonTest {
 		   logger.debug("constructed json body: \n {}", payload);
 		   
 		   System.out.println(payload);
+	}
+	
+	public static void testJson3(){
+	InputStream is = loadFile("person2.txt");
+		
+		/*
+		* {
+			    "id":123,
+			    "name":"Pankaj Kumar",
+			    "permanent":true,
+			    "address":{
+			            "street":"El Camino Real",
+			            "city":"San Jose",
+			            "zipcode":95014
+			        },
+			    "phoneNumbers":[9988664422, 1234567890],
+			    "role":"Developer"
+			}
+		 * 
+		 * */
+		
+		JsonReader jr = Json.createReader(is);
+		
+		JsonObject jo = jr.readObject();
+		
+		logger.debug("reader string:\n{}",jo.toString() );
+		
+		
+		//String stringId= jo.getString("id");
+		//int intId = jo.getInt("id");
+		
+		//logger.debug("stringId: {}, intId: {}", stringId, intId);
+		
 	}
 	
 }
