@@ -1,6 +1,6 @@
 
 
-<form method="post" action="/user/save.do">
+<form method="post" action="/user/save.do?name1=test1">
 
 	<table>
 		<tr>
