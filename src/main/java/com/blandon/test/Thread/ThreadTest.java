@@ -4,6 +4,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +17,8 @@ public class ThreadTest {
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		//executeTask();
 		//submitTask();
-		submitCallableTask();
+		//submitCallableTask();
+		timeoutTask();
 	}
 	
 	
@@ -72,6 +75,22 @@ public class ThreadTest {
 		logger.debug("Result of executing callable task is: {}", result);
 		
 		executorService.shutdown();
+		
+	}
+	
+	public static void timeoutTask() throws InterruptedException, ExecutionException{
+		
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		CallableTask callableTask = new CallableTask();
+		
+		Future<String> future = executorService.submit(callableTask);
+		
+		try {
+			future.get(1, TimeUnit.SECONDS);
+		} catch (TimeoutException e) {
+			logger.debug("Timeout exception occurred.", e);
+		}
+		
 		
 	}
 }
