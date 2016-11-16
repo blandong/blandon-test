@@ -18,7 +18,8 @@ public class ThreadTest {
 		//executeTask();
 		//submitTask();
 		//submitCallableTask();
-		timeoutTask();
+		//simpleTimeoutTask();
+		timeoutTask(true);
 	}
 	
 	
@@ -65,7 +66,7 @@ public class ThreadTest {
 		
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		
-		CallableTask callableTask = new CallableTask();
+		CallableTask callableTask = new CallableTask(false);
 		
 		Future<String> future = executorService.submit(callableTask);
 		
@@ -78,19 +79,58 @@ public class ThreadTest {
 		
 	}
 	
-	public static void timeoutTask() throws InterruptedException, ExecutionException{
+	
+	public static void simpleTimeoutTask() throws InterruptedException, ExecutionException{
 		
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
-		CallableTask callableTask = new CallableTask();
-		
-		Future<String> future = executorService.submit(callableTask);
+		CallableTask callableTask = new CallableTask(true);
+		Future<String> future = null;
 		
 		try {
-			future.get(1, TimeUnit.SECONDS);
+			future = executorService.submit(callableTask);
+			future.get(50, TimeUnit.SECONDS);
 		} catch (TimeoutException e) {
 			logger.debug("Timeout exception occurred.", e);
+			future.cancel(true); //The executor service will stop executing current task
+			//executorService.shutdown(); //The executor service will stop accepting new task, however it doesn't stop currently running task
+			//executorService.shutdownNow(); //The executor service will stop currently running task and top accepting new task
+		}catch(Exception e){
+			logger.error("exception occurred during task execution.", e);
+			future.cancel(true);
 		}
 		
+		logger.debug("timeout task execution completed.");
+		
+		//executorService.shutdownNow();
+		
+	}
+	
+	public static void timeoutTask(boolean alltime) throws InterruptedException, ExecutionException{
+		
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		CallableTask callableTask = new CallableTask(true);
+		
+		Future<String> future = null;
+		int i =0;
+		
+		while(alltime){
+			Thread.sleep(3000);
+			 logger.debug(++i+" time calling callable task...");
+			 future = executorService.submit(callableTask);
+		try {
+			future.get(50, TimeUnit.SECONDS);
+		} catch (TimeoutException e) {
+			logger.debug("Timeout exception occurred.", e);
+			future.cancel(true); //The executor service will stop executing current task
+		}catch(Exception e){
+			logger.error("exception occurred during task execution.", e);
+			future.cancel(true);
+		}
+		
+		logger.debug("timeout task execution completed.");
+		
+	}
+		executorService.shutdownNow();
 		
 	}
 }
