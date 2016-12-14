@@ -35,10 +35,36 @@ public class TestController {
 		
 		request.setAttribute("newUser", newUser);
 		
-
 		return model;
 		
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView  handlePost(HttpServletRequest request, HttpServletResponse  response){
 		
+		//This retrieves the json formatted parameters from the ajax request.
+		String formDataAsJsonString = request.getParameter("formData");
+		
+		//Get name from ajax request
+		String userName = request.getParameter("userName");
+		
+		if(userName != null){
+			throw new RuntimeException("Exception occurred");
+		}
+		
+		User user =  testService.findByName("test");
+		
+		User newUser = new User("newCreatedUser");
+		
+		ModelAndView model = new ModelAndView();
+		model.setViewName("displayUser");
+		
+		model.addObject("returnedUser", user);
+		
+		request.setAttribute("newUser", newUser);
+		
+
+		return model;
 		
 	}
 
