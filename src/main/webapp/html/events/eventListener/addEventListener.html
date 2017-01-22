@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>This example uses the addEventListener() method to attach a click event to a button.</p>
+
+<button id="myBtn">Try it</button>
+
+<p id="demo"></p>
+
+<script>
+document.getElementById("myBtn").addEventListener("click", displayDate);
+document.getElementById("myBtn").addEventListener("mouseover", changeColor);
+document.getElementById("myBtn").addEventListener("mouseout", changeColorBack);
+
+function displayDate() {
+    document.getElementById("demo").innerHTML = Date();
+}
+
+function changeColor(){
+	document.getElementById("myBtn").style.color="red";
+}
+
+function changeColorBack(){
+	document.getElementById("myBtn").style.color="black";
+}
+</script>
+
+</body>
+</html> 

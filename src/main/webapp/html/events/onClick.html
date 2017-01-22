@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<header>
+	<script type="text/javascript">
+		function changeText(element){
+			element.innerHTML="You clicked it!"
+		}
+	</script>
+</header>
+<body>
+
+<h1 onclick="this.innerHTML = 'Ooops!'">Click on this text!</h1>
+
+<h1 onclick="changeText(this)">Try to click!</h1>
+
+<button onclick="displayDate()">Try it</button>
+
+
+</body>
+</html>

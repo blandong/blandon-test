@@ -1,0 +1,54 @@
+<html>
+<body>
+
+<h1 id="id01">My First Page</h1>
+<p id="c01"></p>
+
+<h2 id="id02">to be copied 2</h2>
+<p id="c02"></p>
+
+<h3 id="id03">to be copied 3</h3>
+<p id="c03"></p>
+
+<h4 id="id04">to be copied 3</h4>
+<p id="c04"></p>
+
+<h5 id="id05">to be copied 3</h5>
+<p id="c05"></p>
+
+<script>
+var h1= document.getElementById("id01");
+document.getElementById("c01").innerHTML = h1.innerHTML;
+
+//A common error in DOM processing is to expect an element node to contain text.
+//he text inside HTML elements are text nodes
+var h2=document.getElementById("id02");
+document.getElementById("c02").innerHTML = h2.firstChild.nodeValue;
+
+var h3 = document.getElementById("id03");
+document.getElementById("c03").innerHTML = h3.childNodes[0].nodeValue;
+
+//Note: nodeName always contains the uppercase tag name of an HTML element.
+var h4 = document.getElementById("id04");
+document.getElementById("c04").innerHTML = h4.nodeName;
+
+/** Note types
+Element	1
+Attribute	2
+Text	3
+Comment	8
+Document	9
+ */
+var h5 = document.getElementById("id05");
+document.getElementById("c05").innerHTML = h4.nodeType;
+/*
+ document.body - The body of the document
+ document.documentElement - The full document
+ */
+alert(document.body.innerHTML);
+alert(document.documentElement.innerHTML);
+
+</script>
+
+</body>
+</html>
