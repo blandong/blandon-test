@@ -39,3 +39,6 @@ Or, using JSP Scriptlets (not recommended):
 <%
     String accountId = request.getParameter("accountID");
 %>
+
+
+to access map value with key: value="${map['key']}
