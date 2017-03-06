@@ -1,45 +1,32 @@
 package com.blandon.test;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.blandon.test.bean.User;
-import com.blandon.test.service.TestService;
 
-@Controller
-@RequestMapping(value="/user")
+@RestController
+@EnableAutoConfiguration
 public class TestController {
 	
-	@Autowired
-	private TestService testService;
+	@RequestMapping("/")
+	public String getUserJson(){
+		User user = new User("Blandon", 20);
+		
+		JsonObjectBuilder userBuilder = Json.createObjectBuilder();
+		userBuilder.add("name", user.getName());
+		userBuilder.add("age", user.getAge());
+		
+		return userBuilder.build().toString();
+	}
 	
-	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView  handle(HttpServletRequest request, HttpServletResponse  response){
-		
-		String name = request.getParameter("name");
-		
-		User user =  testService.findByName(name);
-		
-		User newUser = new User("newCreatedUser");
-		
-		ModelAndView model = new ModelAndView();
-		model.setViewName("displayUser");
-		
-		model.addObject("returnedUser", user);
-		
-		request.setAttribute("newUser", newUser);
-		
-
-		return model;
-		
-		
-		
+	public static void main(String[] args) {
+		SpringApplication.run(TestController.class, args);
 	}
 
 }
