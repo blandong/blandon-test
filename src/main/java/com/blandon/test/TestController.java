@@ -3,15 +3,12 @@ package com.blandon.test;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blandon.test.bean.User;
 
 @RestController
-@EnableAutoConfiguration
 public class TestController {
 	
 	@RequestMapping("/")
@@ -23,10 +20,6 @@ public class TestController {
 		userBuilder.add("age", user.getAge());
 		
 		return userBuilder.build().toString();
-	}
-	
-	public static void main(String[] args) {
-		SpringApplication.run(TestController.class, args);
 	}
 
 }
