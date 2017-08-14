@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.blandon.test.bean.User;
@@ -82,5 +83,10 @@ public class TestController {
 	}
 	
 	
+	@RequestMapping(method = RequestMethod.GET, value="name")
+	@ResponseBody
+	public String  handle4(HttpServletRequest request, HttpServletResponse  response){
+		return "Name of user";
+	}
 
 }
