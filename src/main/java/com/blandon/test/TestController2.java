@@ -17,14 +17,14 @@ import com.blandon.test.service.TestService;
 
 @Controller
 @RequestMapping(value="/user")
-public class TestController {
+public class TestController2 {
 	
 	@Autowired
 	private TestService testService;
 	
-	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(TestController2.class);
 	
-	@RequestMapping(value = "/get1", method = RequestMethod.GET)
+	@RequestMapping(value="/get2", method = RequestMethod.GET)
 	public ModelAndView  handle(HttpServletRequest request, HttpServletResponse  response){
 		
 		String name = request.getParameter("name");
@@ -44,7 +44,7 @@ public class TestController {
 		
 	}
 	
-	@RequestMapping(value="/save", method=RequestMethod.POST)
+	@RequestMapping(value="/save2", method=RequestMethod.POST)
 	public String handle2(HttpServletRequest request, HttpServletResponse response){
 		
 		String requestUrl = request.getRequestURL().toString();
@@ -75,7 +75,7 @@ public class TestController {
 	
 	
 	
-	@RequestMapping(method = RequestMethod.GET, value="test")
+	@RequestMapping(method = RequestMethod.GET, value="test2")
 	public ModelAndView  handle3(HttpServletRequest request, HttpServletResponse  response){
 		ModelAndView model = new ModelAndView();
 		model.setViewName("displayUser");
@@ -83,7 +83,7 @@ public class TestController {
 	}
 	
 	
-	@RequestMapping(method = RequestMethod.GET, value="name")
+	@RequestMapping(method = RequestMethod.GET, value="name2")
 	@ResponseBody
 	public String  handle4(HttpServletRequest request, HttpServletResponse  response){
 		return "Name of user";
