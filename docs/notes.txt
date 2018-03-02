@@ -1,0 +1,1 @@
+start the rabbitmq with "rabbitmq-server" command in terminal
