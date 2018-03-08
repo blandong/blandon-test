@@ -1,1 +1,10 @@
 start the rabbitmq with "rabbitmq-server" command in terminal
+
+#list number of unacknowledged messages
+sudo rabbitmqctl list_queues name messages_ready messages_unacknowledged
+
+#list exchanges
+sudo rabbitmqctl list_exchanges
+
+#list exchange queue binding
+rabbitmqctl list_bindings

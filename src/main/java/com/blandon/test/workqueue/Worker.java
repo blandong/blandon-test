@@ -11,7 +11,7 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
 public class Worker {
-	private final static String QUEUE_NAME = "hello";
+	private final static String QUEUE_NAME = "task_queue";
 
 	  public static void main(String[] argv) throws Exception {
 	    ConnectionFactory factory = new ConnectionFactory();
@@ -21,6 +21,9 @@ public class Worker {
 
 	    channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 	    System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+	    
+	    //This tells RabbitMQ not to give more than one message to a worker at a time. Or, in other words, don't dispatch a new message to a worker until it has processed and acknowledged the previous one. Instead, it will dispatch it to the next worker that is not still busy.
+	    channel.basicQos(1);
 
 	    Consumer consumer = new DefaultConsumer(channel) {
 	      @Override
@@ -34,6 +37,8 @@ public class Worker {
 				e.printStackTrace();
 			} finally {
 	            System.out.println(" [x] Done");
+	            //Tell RabbitMQ server to delete the message as it is already successfully acknowledged.
+	            channel.basicAck(envelope.getDeliveryTag(), false);
 	          }
 	      }
 	    };
@@ -45,7 +50,7 @@ public class Worker {
 		  System.out.println(" Checking message");
 		    for (char ch: task.toCharArray()) {
 		        if (ch == '.') {
-		        	Thread.sleep(1000000000);
+		        	Thread.sleep(10000);
 		        	}
 		    }
 		}  
