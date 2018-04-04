@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.blandon.test.bean.User;
 import com.blandon.test.dao.UserDao;
 
-@Service
+//@Service
 public class TestService {
 	
 	@Autowired
