@@ -66,5 +66,18 @@
         
   </dependencies>
   
+  <distributionManagement>
+    <repository>
+      <id>new-nexus-deployment</id>
+      <name>Releases</name>
+      <url>http://nexus-eng-np.av.covisint.net/content/repositories/core-release</url>
+    </repository>
+    <snapshotRepository>
+      <id>new-nexus-deployment</id>
+      <name>Snapshots</name>
+      <url>http://nexus-eng-np.av.covisint.net/content/repositories/core-snapshot</url>
+    </snapshotRepository>
+  </distributionManagement>
+  
   
 </project>

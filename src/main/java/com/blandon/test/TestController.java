@@ -1,5 +1,7 @@
 package com.blandon.test;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,7 +18,6 @@ import com.blandon.test.bean.User;
 import com.blandon.test.service.TestService;
 
 @Controller
-@RequestMapping(value="/user")
 public class TestController {
 	
 	@Autowired
@@ -25,7 +26,7 @@ public class TestController {
 	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
 	
 	@RequestMapping(value = "/get1", method = RequestMethod.GET)
-	public ModelAndView  handle(HttpServletRequest request, HttpServletResponse  response){
+	public ModelAndView  handle(HttpServletRequest request, HttpServletResponse  response) throws IOException{
 		
 		String name = request.getParameter("name");
 		
@@ -39,6 +40,8 @@ public class TestController {
 		model.addObject("returnedUser", user);
 		
 		request.setAttribute("newUser", newUser);
+		
+		response.sendRedirect("http://sorry.covisint.com/covisint-notice.html");
 
 		return model;
 		
@@ -75,13 +78,20 @@ public class TestController {
 	
 	
 	
-	@RequestMapping(method = RequestMethod.GET, value="test")
-	public ModelAndView  handle3(HttpServletRequest request, HttpServletResponse  response){
+	@RequestMapping(method = RequestMethod.GET, value="/test")
+	public ModelAndView  handle3(HttpServletRequest request, HttpServletResponse  response) throws IOException{
 		ModelAndView model = new ModelAndView();
 		model.setViewName("displayUser");
+		response.sendRedirect("http://sorry.covisint.com/covisint-notice.html");
 		return model;
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/")
+	public void  handle14(HttpServletRequest request, HttpServletResponse  response) throws IOException{
+		ModelAndView model = new ModelAndView();
+		model.setViewName("displayUser");
+		response.sendRedirect("http://sorry.covisint.com/generic-maintenance.html");
+	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="name")
 	@ResponseBody
