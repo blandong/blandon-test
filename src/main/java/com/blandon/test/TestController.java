@@ -78,15 +78,7 @@ public class TestController {
 	
 	
 	
-	@RequestMapping(method = RequestMethod.GET, value="/test")
-	public ModelAndView  handle3(HttpServletRequest request, HttpServletResponse  response) throws IOException{
-		ModelAndView model = new ModelAndView();
-		model.setViewName("displayUser");
-		response.sendRedirect("http://sorry.covisint.com/covisint-notice.html");
-		return model;
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value="/")
+	@RequestMapping(method = RequestMethod.GET, value="**")
 	public void  handle14(HttpServletRequest request, HttpServletResponse  response) throws IOException{
 		ModelAndView model = new ModelAndView();
 		model.setViewName("displayUser");
