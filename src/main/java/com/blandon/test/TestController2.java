@@ -82,10 +82,20 @@ public class TestController2 {
 		return model;
 	}
 	
+	/**
+	 * This(**) maps to all requests.
+	 * */
+	@RequestMapping(method = RequestMethod.GET, value="**")
+	public ModelAndView  handle4(HttpServletRequest request, HttpServletResponse  response){
+		ModelAndView model = new ModelAndView();
+		model.setViewName("displayUser");
+		return model;
+	}
+	
 	
 	@RequestMapping(method = RequestMethod.GET, value="name2")
 	@ResponseBody
-	public String  handle4(HttpServletRequest request, HttpServletResponse  response){
+	public String  handle5(HttpServletRequest request, HttpServletResponse  response){
 		return "Name of user";
 	}
 
