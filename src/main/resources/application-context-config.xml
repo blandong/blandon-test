@@ -9,10 +9,6 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-	<bean id="testService" class="com.blandon.test.service.TestService" />
-	
-	<bean id="userDao" class="com.blandon.test.dao.UserDao" />
-
 	<context:component-scan base-package="com.blandon.test" />
 	
 	 <context:annotation-config/>
