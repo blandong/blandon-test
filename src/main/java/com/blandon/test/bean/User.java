@@ -27,6 +27,14 @@ public class User {
 	public void setAge(int age) {
 		this.age = age;
 	}
+	public User(String name, int age) {
+		super();
+		this.name = name;
+		this.age = age;
+	}
 	
+	public  void printPerson() {
+		System.out.println(this.getName()+", "+this.getAge());
+	}
 	
 }
