@@ -1,0 +1,2 @@
+#builder pattern with mandatory fields
+https://blog.jayway.com/2012/02/07/builder-pattern-with-a-twist/
