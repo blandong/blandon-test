@@ -1,0 +1,20 @@
+@Pointcut("execution(public * *(..))")  
+It will be applied on all the public methods.
+
+
+@Pointcut("execution(public Operation.*(..))") 
+It will be applied on all the public methods of Operation class.
+
+
+@Pointcut("execution(* Operation.*(..))")  
+It will be applied on all the methods of Operation class.
+
+@Pointcut("execution(public Employee.set*(..))")  
+It will be applied on all the public setter methods of Employee class.
+
+
+@Pointcut("execution(int Operation.*(..))")  
+It will be applied on all the methods of Operation class that returns int value.
+
+ @Pointcut("execution(@com.blandon.test.testAnnotation * *(..))")
+It will be applied on ecution of any method annotated with com.blandon.test.testAnnotation with any return type in any class being in any package
