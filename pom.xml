@@ -3,7 +3,7 @@
   <groupId>com.blandon.test</groupId>
   <artifactId>blandon-test</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
   
   
   <dependencies>
