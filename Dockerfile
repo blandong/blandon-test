@@ -1,5 +1,5 @@
 FROM java:8
 WORKDIR /
-ADD HelloWorld.jar HelloWorld.jar
-EXPOSE 8080
-CMD java - jar HelloWorld.jar
+COPY testDocker.jar /HelloWorld.jar
+#CMD java -jar HelloWorld.jar blandon
+CMD ["java", "-jar", "HelloWorld.jar", "nedlon"]

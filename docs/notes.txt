@@ -1,0 +1,1 @@
+docker image build /Users/bdong/git/blandon-test/target -f /Users/bdong/git/blandon-test/Dockerfile2

@@ -1,0 +1,5 @@
+FROM java:8
+WORKDIR /
+COPY classes /classes
+#CMD java -cp ./classes com.blandon.test.HelloWorld gary2
+CMD ["java", "-cp", "/classes","com.blandon.test.HelloWorld", "gary3"]
