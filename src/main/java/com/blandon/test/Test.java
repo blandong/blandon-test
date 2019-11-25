@@ -26,6 +26,7 @@ public class Test {
 		//ageMoreThan20(users);
 		//lambdaForEach(users);
 		lambdaFilter(users);
+		lambdaMap(users);
 		//lambdaCollectFilteredUsers(users);
 	}
 	
@@ -36,6 +37,16 @@ public class Test {
 		//users.stream().filter(u -> u.getAge()>20).forEach(u -> System.out.println(u.getName()+", "+u.getAge()));
 		//users.stream().filter(u -> u.getAge()>20).forEach(User::printPerson);
 		System.out.println(users.stream().filter(u -> u.getAge()>20).mapToInt(u -> u.getAge()).average().getAsDouble());
+	}
+	
+	private static void lambdaMap(List<User> users) {
+		 List<String> nameList = users.stream().map(u -> u.getName()).collect(Collectors.toList());
+		 System.out.println(nameList);
+	}
+	
+	private static void lambdaMap2(List<User> users) {
+		 List<Integer> nameList = users.stream().map(u -> u.getAge()*2).collect(Collectors.toList());
+		 System.out.println(nameList);
 	}
 	
 	/**
