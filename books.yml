@@ -1,0 +1,10 @@
+applications:
+- name: book-1
+  instances: 1
+  memory: 1024M
+  disk_quota: 1024M
+  routes:
+  - route: book-1.run.covisintrnd.com
+  buildpack: covs-java-III
+  stack: covs-cflinuxfs2
+  timeout: 180

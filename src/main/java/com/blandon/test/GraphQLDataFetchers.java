@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class GraphQLDataFetchers {
@@ -15,7 +16,7 @@ public class GraphQLDataFetchers {
             ImmutableMap.of("id", "book-1",
                     "name", "Harry Potter and the Philosopher's Stone",
                     "pageCount", "223",
-                    "authorId", "author-1"),
+                    "authorId", "author-1,author-2"),
             ImmutableMap.of("id", "book-2",
                     "name", "Moby Dick",
                     "pageCount", "635",
@@ -55,9 +56,14 @@ public class GraphQLDataFetchers {
             String authorId = book.get("authorId");
             return authors
                     .stream()
-                    .filter(author -> author.get("id").equals(authorId))
-                    .findFirst()
-                    .orElse(null);
+                    .filter(author -> authorId.contains(author.get("id")))
+                    .collect(Collectors.toList());
         };
+    }
+    
+    public DataFetcher listBooks() {
+    	return dataFetchingEnvironment -> {
+    		return books;
+    	};
     }
 }
