@@ -50,24 +50,19 @@
             <version>18.0</version>
         </dependency>
         
-        <dependency>
-       	  <groupId>log4j</groupId>
-		  <artifactId>log4j</artifactId>
-		  <version>1.2.17</version>
-        </dependency>
-        
-        <dependency>
-		  <groupId>org.slf4j</groupId>
-		  <artifactId>slf4j-api</artifactId>
-      	  <version>1.7.5</version>
-        </dependency>
-        
-        <dependency>
-			 <groupId>org.slf4j</groupId>
-			 <artifactId>slf4j-log4j12</artifactId>
-	       	 <version>1.7.5</version>
-        </dependency>
+		<dependency>
+		 <groupId>com.google.flogger</groupId>
+		 <artifactId>flogger</artifactId>
+		 <version>0.4</version>
+		</dependency>
 		
+		<dependency>
+		    <groupId>com.google.flogger</groupId>
+		    <artifactId>flogger-system-backend</artifactId>
+		    <version>0.4</version>
+		    <scope>runtime</scope>
+		</dependency>
+        
   </dependencies>
   
    <repositories>
