@@ -14,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.blandon.test.bean.User;
 import com.blandon.test.service.TestService;
+import com.codahale.metrics.annotation.Gauge;
+import com.codahale.metrics.annotation.Timed;
 
 @Controller
 @RequestMapping(value="/user")
@@ -23,9 +25,9 @@ public class TestController {
 	private TestService testService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
-	
+	@Timed(name = "getTimer")
 	@RequestMapping(value = "/get1", method = RequestMethod.GET)
-	public ModelAndView  handle(HttpServletRequest request, HttpServletResponse  response){
+	protected ModelAndView  handle(HttpServletRequest request, HttpServletResponse  response){
 		
 		String name = request.getParameter("name");
 		

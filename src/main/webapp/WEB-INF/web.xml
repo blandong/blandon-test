@@ -3,7 +3,9 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:app-context-config.xml</param-value>
+		<param-value>classpath:app-context-config.xml
+					 classpath:spring-metrics.xml
+		</param-value>
 	</context-param>
 	
 	<listener>
@@ -13,6 +15,11 @@
 	<servlet>
 	   <servlet-name>blandon-test</servlet-name>
 	     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	     <init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:blandon-test-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 
