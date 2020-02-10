@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:c="http://www.springframework.org/schema/c" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd 
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+	<bean id="testService" class="com.blandon.test.service.TestService" />
+	
+	<bean id="userDao" class="com.blandon.test.dao.UserDao" p:dataSource-ref="datasource"/>
+
+	<context:component-scan base-package="com.blandon.test" />
+	
+	 <context:annotation-config/>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+	
+	
+    
+    <jdbc:embedded-database id="datasource" type="H2">
+        <jdbc:script location="classpath:user.sql" />
+    </jdbc:embedded-database>
+ 
+    
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="datasource" />
+    </bean>
+    
+    <!-- beans tags have to be defined in last part of the xml -->
+     <beans profile="dev">
+        <context:property-placeholder location="classpath:/app.conf" />
+    </beans>
+    <beans profile="!dev">
+        <context:property-placeholder />
+    </beans>
+
+</beans>

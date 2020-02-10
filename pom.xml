@@ -93,6 +93,32 @@
 		    <artifactId>flogger-slf4j-backend</artifactId>
 		    <version>0.4</version>
 		</dependency>
+		
+		        <!-- Test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.1.6.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+             <version>1.4.200</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.9</version>
+        </dependency>
+        
+        <dependency>
+        	  <groupId>org.testng</groupId>
+			  <artifactId>testng</artifactId>
+			  <version>6.10</version>
+        </dependency>
         
   </dependencies>
   

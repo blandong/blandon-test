@@ -33,8 +33,9 @@ public class UserDao extends JdbcDaoSupport {
 	}
 	
 	
-	public void saveAuthn() {
-		addOrUpdateAuthenticationLog(sql);
+	public int saveAuthn() {
+		int row = addOrUpdateAuthenticationLog(sql);
+		return row;
 	}
 	
 	
@@ -59,9 +60,21 @@ public class UserDao extends JdbcDaoSupport {
         return rowsUpdated;
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] test) {
+    	 final MapSqlParameterSource args = new MapSqlParameterSource();
+
+         args.addValue("userId", "[S-A415-T34]S-A415-T34_ADMIN1");
+         args.addValue("cuid", "[S-A415-T34]S-A415-T34_ADMIN");
+         args.addValue("authenticatedTime", System.currentTimeMillis());
+         args.addValue("realm", "S-A415-T34");
+         args.addValue("version", 200);
+         args.addValue("creator", "[S-A415-T34]S-A415-T34_ADMIN");
+         args.addValue("creationInstant", System.currentTimeMillis());
+         args.addValue("creatorAppId", "{application}cca");
     	final int rowsUpdated=1;
-    	logger.atFine().log("Rows touched: %s", rowsUpdated);
+    	logger.atFine().log("Rows touched: %s", args.getValues());
+    	
+    	logger.atFine().log("Rows touched: {}", args.getValues());
 	}
 	
 	
