@@ -1,3 +1,63 @@
 
 https://github.com/google/flogger
+https://www.baeldung.com/flogger-logging
 
+
+Using Flogger With Other Backends
+So, what if we would like to add Flogger to our existing application that is already using say Slf4j or Log4j for example? This could be useful in cases where we would want to take advantage of our existing configurations. Flogger supports multiple backends as we'll see.
+
+5.1 Flogger With Slf4j
+It's simple to configure an Slf4j back-end. First, we need to add the flogger-slf4j-backend dependency to our pom:
+
+<dependency>
+    <groupId>com.google.flogger</groupId>
+    <artifactId>flogger-slf4j-backend</artifactId>
+    <version>0.4</version>
+</dependency>
+
+Next, we need to tell Flogger that we would like to use a different back-end from the default one. We do this by registering a Flogger factory through system properties:
+
+System.setProperty(
+  "flogger.backend_factory", "com.google.common.flogger.backend.slf4j.Slf4jBackendFactory#getInstance");
+And now our application will use the existing configuration.
+
+5.1 Flogger With Log4j
+We follow similar steps for configuring Log4j back-end. Let's add the flogger-log4j-backend dependency to our pom:
+<dependency>
+    <groupId>com.google.flogger</groupId>
+    <artifactId>flogger-log4j-backend</artifactId>
+    <version>0.4</version>
+    <exclusions>
+        <exclusion>
+            <groupId>com.sun.jmx</groupId>
+            <artifactId>jmxri</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>com.sun.jdmk</groupId>
+            <artifactId>jmxtools</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>javax.jms</groupId>
+            <artifactId>jms</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+ 
+<dependency>
+    <groupId>log4j</groupId>
+    <artifactId>log4j</artifactId>
+    <version>1.2.17</version>
+</dependency>
+<dependency>
+    <groupId>log4j</groupId>
+    <artifactId>apache-log4j-extras</artifactId>
+    <version>1.2.17</version>
+</dependency>
+
+
+We also need to register a Flogger back-end factory for Log4j:
+
+
+System.setProperty(
+  "flogger.backend_factory", "com.google.common.flogger.backend.log4j.Log4jBackendFactory#getInstance");
+And that's it, our application is now set up to use existing Log4j configurations!
