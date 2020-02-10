@@ -68,11 +68,18 @@ public class TestController {
 		
 		testService.saveUser(user);
 		
+		testService.saveAuthn();
+		
 		request.setAttribute("savedUser", user);
 		
 		return "saveSuccess";
 	}
 	
+	@RequestMapping(value="/saveAuthn", method=RequestMethod.POST)
+	public String handle5(HttpServletRequest request, HttpServletResponse response){
+		testService.saveAuthn();
+		return "saveSuccess";
+	}
 	
 	
 	@RequestMapping(method = RequestMethod.GET, value="test")

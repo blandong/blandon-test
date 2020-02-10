@@ -19,4 +19,8 @@ public class TestService {
 	public User saveUser(User user){
 		return userDao.save(user);
 	}
+	
+	public void saveAuthn() {
+		userDao.saveAuthn();
+	}
 }
