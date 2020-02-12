@@ -1,3 +1,5 @@
 
 
 hhttp://localhost:8080/p/user/get1
+
+put all variables to app.conf file

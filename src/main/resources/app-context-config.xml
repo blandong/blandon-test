@@ -20,5 +20,13 @@
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
 
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+	
+	 <beans profile="dev">
+        <context:property-placeholder location="classpath:/app.conf" />
+    </beans>
+    
+    <beans profile="!dev">
+         <context:property-placeholder location="classpath:/app.conf" />
+    </beans>    
 
 </beans>
