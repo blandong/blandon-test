@@ -1,3 +1,11 @@
 
 
 hhttp://localhost:8080/p/user/get1
+
+run as -> jetty:run
+debug as -> jetty:run
+
+
+
+com.blandon.test.dao.UserDaoTest
+
