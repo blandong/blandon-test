@@ -55,6 +55,8 @@ public class Test {
 	private static void lambdaCollectFilteredUsers(List<User> users) {
 		List<User> newUsers = users.stream().filter(u->u.getAge()>20).collect(Collectors.toList());
 		newUsers.forEach(User::printPerson);
+		
+		User atestUser = users.stream().filter(u->"atest".equals(u.getName())).findAny().orElse(null);
 	}
 	
 	private static void lambdaForEach(List<User> users) {
@@ -74,6 +76,19 @@ public class Test {
 				System.out.println("Users who are older than 20: "+user.getName()+", "+user.getAge());
 			}
 		}
+	}
+	
+	private static void testIfListContainElement(List<User> users) {
+		boolean testIfUserExists = users.stream().anyMatch(u -> "atest".equals(u.getName()));
+		
+		boolean testIfUserExists2 =false;
+		Predicate<User> preUsers = (user) -> "atest".equals(user.getName());
+		for(User user: users) {
+			if(preUsers.test(user)) {
+				 testIfUserExists2 = true;
+			}
+		}
+		
 	}
 	
 	//Implement Runnable interface
