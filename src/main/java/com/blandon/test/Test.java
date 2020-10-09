@@ -1,6 +1,7 @@
 package com.blandon.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -25,12 +26,17 @@ public class Test {
 		//runnableTest();
 		//ageMoreThan20(users);
 		//lambdaForEach(users);
-		lambdaFilter(users);
-		lambdaMap(users);
+		//lambdaFilter(users);
+		//lambdaMap(users);
 		//lambdaCollectFilteredUsers(users);
+		loopArray(users);
 	}
 	
 	
+	private static void loopArray(List<User> users) {
+		String[] names = users.stream().map(user -> user.getName()).toArray(String[]::new);
+		Arrays.stream(names).forEach(name -> System.out.println("name is: "+name));
+	}
 	
 	
 	private static void lambdaFilter(List<User> users) {
