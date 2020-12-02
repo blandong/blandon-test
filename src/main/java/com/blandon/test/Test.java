@@ -3,6 +3,7 @@ package com.blandon.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,15 @@ public class Test {
 		loopArray(users);
 	}
 	
+	
+	private static List<String> functionTest(List<User> userList) {
+		//Write a function which converts list of users to list of user names
+		Function<List<User>, List<String>> toNamesFunction = users -> {
+			return users.stream().map(user -> user.getName()).collect(Collectors.toList());
+					};
+		//user the aforementioned function to do the conversion.
+		return toNamesFunction.apply(userList);
+	}
 	
 	private static void loopArray(List<User> users) {
 		String[] names = users.stream().map(user -> user.getName()).toArray(String[]::new);
