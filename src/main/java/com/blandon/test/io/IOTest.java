@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 
 import org.apache.commons.io.IOUtils;
 
+import com.google.common.io.ByteStreams;
 import com.google.common.io.CharStreams;
 
 public class IOTest {
@@ -32,8 +33,11 @@ public class IOTest {
 		//Read file into input stream.
 		InputStream is = IOTest.class.getClassLoader().getResourceAsStream("testFile.txt");
 		
-		//input stream to byte array.
+		//input stream to byte array with apache commons-io
 		byte[] bytes = IOUtils.toByteArray(is);
+		
+		//input stream to byte array with Guava.
+		byte[] eventBytes = ByteStreams.toByteArray(is);
 		
 		//byte array to string
 		String byteArrayString = new String(bytes);
