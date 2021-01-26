@@ -28,7 +28,18 @@ public class IOTest {
 		readInputStream();
 	}
 	
-	
+	private static void readFileIntoByteArray() throws IOException {
+		//Read file into input stream.
+		InputStream is = IOTest.class.getClassLoader().getResourceAsStream("testFile.txt");
+		
+		//input stream to byte array.
+		byte[] bytes = IOUtils.toByteArray(is);
+		
+		//byte array to string
+		String byteArrayString = new String(bytes);
+		
+		
+	}
 	
 	private static void bufferedReader() throws URISyntaxException, IOException{
 		BufferedReader bd = null;
