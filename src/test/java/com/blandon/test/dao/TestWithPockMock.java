@@ -12,6 +12,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @RunWith(PowerMockRunner.class)
 public class TestWithPockMock {
@@ -33,7 +34,12 @@ public class TestWithPockMock {
 		
 		PowerMockito.when(namedParameterJdbcTemplate.update(Mockito.anyString(), Mockito.any(MapSqlParameterSource.class))).thenReturn(1);
 		
-		int updatedRow = (int) addOrUpdateAuthenticationLogMethod.invoke(userDao, "dummySqlQuery");
+		String dummySQL = "\"dummySqlQuery\"";
+		
+		//example to set private field without setter method.
+		ReflectionTestUtils.setField(userDao, "sql", dummySQL);
+		
+		int updatedRow = (int) addOrUpdateAuthenticationLogMethod.invoke(userDao, dummySQL);
 		
 		System.out.println("######: "+updatedRow);
 		
