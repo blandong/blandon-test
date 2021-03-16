@@ -22,6 +22,13 @@ public class TestWithPockMock {
 	public void test1() throws Exception {
 		Method addOrUpdateAuthenticationLogMethod = UserDao.class.getDeclaredMethod("addOrUpdateAuthenticationLog", String.class);
 		addOrUpdateAuthenticationLogMethod.setAccessible(true);
+		
+		//get private field from instance
+		//Field f = obj.getClass().getDeclaredField("stuffIWant"); //NoSuchFieldException
+		//f.setAccessible(true);
+		//Hashtable iWantThis = (Hashtable) f.get(obj); //IllegalAccessException
+		
+		
 		UserDao userDao = new UserDao();
 		// When spying, you take an existing object and "replace" only some methods.
 		userDao = PowerMockito.spy(userDao);
