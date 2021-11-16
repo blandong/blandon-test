@@ -1,54 +1,77 @@
 package com.blandon.test;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.Security;
+import java.security.SecureRandom;
 import java.util.Base64;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 public class Test {
-	public static void main(String[] args) throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException, NoSuchProviderException {
-		String encryptionKeyString =  "thisisa128bitkey";
-	    String originalMessage = "This is a secret message";
-	    byte[] encryptedMessageBytes = encryptMessage(originalMessage.getBytes(), encryptionKeyString.getBytes());
-	    
-	    String encodedEncryptedStringMessage = Base64.getEncoder().encodeToString(encryptedMessageBytes);
-	    
-	    System.out.println("Encoded encryptedMessage: "+encodedEncryptedStringMessage);
-	    
-	    //String decryptededMessage = new String(decryptMessage(Base64.getDecoder().decode(encodedEncryptedStringMessage), encryptionKeyString.getBytes()));
-	    
-	    //System.out.println("decryptededMessage: "+ decryptededMessage);
+	static String plainText = "This is a plain text which need to be encrypted by Java AES 256 GCM Encryption Algorithm";
+    public static final int AES_KEY_SIZE = 128;
+    public static final int GCM_IV_LENGTH = 12;
+    public static final int GCM_TAG_LENGTH = 16;
+	
+	public static void main(String[] args) throws Exception {
+		 KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+	        keyGenerator.init(AES_KEY_SIZE);
+	       
+	        // Generate Key
+	        SecretKey key = keyGenerator.generateKey();
+	        byte[] IV = new byte[GCM_IV_LENGTH];
+	        SecureRandom random = new SecureRandom();
+	        random.nextBytes(IV);
+
+	        System.out.println("Original Text : " + plainText);
+	        
+	        byte[] cipherText = encrypt(plainText.getBytes(), key, IV);
+	        System.out.println("Encrypted Text : " + Base64.getEncoder().encodeToString(cipherText));
+	        
+	        String decryptedText = decrypt(cipherText, key, IV);
+	        System.out.println("DeCrypted Text : " + decryptedText);
 		
 	}
 	
-	public static byte[] encryptMessage(byte[] message, byte[] keyBytes)
-			  throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, 
-			    BadPaddingException, IllegalBlockSizeException, NoSuchProviderException {
-				//Security.addProvider(new BouncyCastleProvider());
-				//Cipher cipher = Cipher.getInstance("AES/GCM/PKCS5Padding", "BC");
-				Cipher cipher = Cipher.getInstance("AES/GCM/PKCS5Padding");
-			    SecretKey secretKey = new SecretKeySpec(keyBytes, "AES");
-			    cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-			    return cipher.doFinal(message);
-			}
-	
-	public static byte[] decryptMessage(byte[] encryptedMessage, byte[] keyBytes) 
-			  throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, 
-			    BadPaddingException, IllegalBlockSizeException {
-			 
-			    Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-			    SecretKey secretKey = new SecretKeySpec(keyBytes, "AES");
-			    cipher.init(Cipher.DECRYPT_MODE, secretKey);
-			    return cipher.doFinal(encryptedMessage);
-			}
+	public static byte[] encrypt(byte[] plaintext, SecretKey key, byte[] IV) throws Exception
+    {
+        // Get Cipher Instance
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        
+        // Create SecretKeySpec
+        SecretKeySpec keySpec = new SecretKeySpec(key.getEncoded(), "AES");
+        
+        // Create GCMParameterSpec
+        GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, IV);
+        
+        // Initialize Cipher for ENCRYPT_MODE
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmParameterSpec);
+        
+        // Perform Encryption
+        byte[] cipherText = cipher.doFinal(plaintext);
+        
+        return cipherText;
+    }
+
+    public static String decrypt(byte[] cipherText, SecretKey key, byte[] IV) throws Exception
+    {
+        // Get Cipher Instance
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        
+        // Create SecretKeySpec
+        SecretKeySpec keySpec = new SecretKeySpec(key.getEncoded(), "AES");
+        
+        // Create GCMParameterSpec
+        GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, IV);
+        
+        // Initialize Cipher for DECRYPT_MODE
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmParameterSpec);
+        
+        // Perform Decryption
+        byte[] decryptedText = cipher.doFinal(cipherText);
+        
+        return new String(decryptedText);
+    }
 }
