@@ -1,0 +1,3 @@
+1. /Users/bdong/IdeaProjects/blandon-test/target/classes
+2. java -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=200s,filename=flight.jfr com.blandon.test.Test
+3. Import flight.jfr to JMC.
