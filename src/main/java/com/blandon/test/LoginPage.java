@@ -18,13 +18,13 @@ public class LoginPage {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(id = "user")
+    @FindBy(id = "user_login")
     public WebElement user;
 
-    @FindBy(id = "password")
+    @FindBy(id = "user_password")
     public WebElement password;
 
-    @FindBy(name = "signon")
+    @FindBy(name = "commit")
     public WebElement loginButton;
 
     public void waitForElementToAppear(WebElement element){
@@ -34,7 +34,7 @@ public class LoginPage {
 
 
     public void login(String user, String password) {
-        driver.get("https://d-ins01-test2.login.dev.covapp.io/login.do");
+        driver.get("https://classroom.kindercare.com/login");
         this.user.sendKeys(user);
         this.password.sendKeys(password);
         loginButton.click();
